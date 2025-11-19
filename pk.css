@@ -1,0 +1,320 @@
+/* ---------------------------------------------------
+   GLOBAL RESET
+--------------------------------------------------- */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------
+   BODY BACKGROUND
+--------------------------------------------------- */
+body{
+    background: url("pawan.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+/* ---------------------------------------------------
+   NAVBAR DESIGN
+--------------------------------------------------- */
+.navbar{
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.logo{
+    color: #ff7200;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 0 0 20px #ff7200;
+}
+
+.menu{
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.menu li a{
+    text-decoration: none;
+    color: #00eaff;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 0 0 15px #00eaff;
+    transition: 0.3s;
+}
+
+.menu li a:hover{
+    color: white;
+}
+
+/* ---------------------------------------------------
+   SEARCH BOX
+--------------------------------------------------- */
+.search-box{
+    display: flex;
+    align-items: center;
+}
+
+.search-box input{
+    width: 200px;
+    height: 35px;
+    border: 1px solid #00eaff;
+    background: transparent;
+    padding: 10px;
+    color: #00eaff;
+}
+
+.search-box input::placeholder{
+    color: #00eaff;
+}
+
+.search-box button{
+    height: 35px;
+    width: 90px;
+    background: #ff7200;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* ---------------------------------------------------
+   MAIN HERO SECTION TEXT
+--------------------------------------------------- */
+.main-text{
+    position: absolute;
+    top: 30%;
+    left: 10%;
+    transform: translateY(-50%);
+    text-align: left;
+    max-width: 450px;
+    z-index: 3;
+}
+
+.main-text h2{
+    font-size: 42px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 0 10px #000;
+}
+
+.main-text p{
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+}
+
+.join-btn{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 26px;
+    color: white;
+    border: 2px solid #ff7200;
+    border-radius: 8px;
+    background: rgba(255, 114, 0, 0.2);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.join-btn:hover{
+    background: #ff7200;
+}
+
+/* ---------------------------------------------------
+   PHONE / LOGIN BOX (single, non-overlapping)
+--------------------------------------------------- */
+.phone-box{
+    position: absolute;
+    top: 35%;
+    right: 5%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 26px;
+    padding: 18px 16px;
+    text-align: center;
+    z-index: 1100;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    border: 3px solid #ff7200;
+}
+
+.screen{
+    width: 100%;
+    margin: 0 auto;
+    background: transparent;
+    padding: 0;
+}
+
+.screen h3{
+    color: #ff7200;
+    margin: 6px 0 14px 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.screen input{
+    width: 100%;
+    padding: 10px 12px;
+    margin: 8px 0;
+    border: 2px solid rgba(255,114,0,0.14);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    color: white;
+    outline: none;
+}
+
+.screen input:focus{
+    border-color: #ff7a1a;
+    box-shadow: 0 0 6px rgba(255,122,26,0.12);
+}
+
+.login-btn{
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #ff7a1a;
+    color: white;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+.link-btn{
+    background: none;
+    border: none;
+    color: #63d6ff;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+}
+
+.signup-text{
+    font-size: 14px;
+    margin-top: 10px;
+    color: #ddd;
+}
+
+/* ---------------------------------------------------
+   SOCIAL ICONS (FIXED BOTTOM)
+--------------------------------------------------- */
+.social-box{
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 28px;
+    z-index: 1050;
+}
+
+.social-box .i{
+    font-size: 36px;
+}
+
+.insta{ color:#ff00c8; }
+.tele{ color:#00eaff; }
+.tw{ color:#1da1f2; }
+.yt{ color:#ff0000; }
+
+/* ---------------------------------------------------
+   SECTION BOXES (Welcome, About, Services, Designs)
+--------------------------------------------------- */
+.section{
+    width: 80%;
+    margin: 320px auto 60px auto;
+    padding: 40px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 12px;
+    border-left: 4px solid #ff7200;
+    color: white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px);
+    position: relative;
+    z-index: 1;
+}
+
+.section + .section{
+    margin-top: 40px;
+}
+
+.section h1{
+    font-size: 35px;
+    margin-bottom: 15px;
+    color: #ff7200;
+    text-shadow: 0 0 15px #ff7200;
+}
+
+.section ul{
+    list-style: none;
+    margin-top: 10px;
+}
+
+.section ul li{
+    margin: 8px 0;
+    font-size: 18px;
+}
+
+/* ---------------------------------------------------
+   MOBILE RESPONSIVE
+--------------------------------------------------- */
+@media (max-width: 650px){
+
+    .navbar{
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .menu{
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .main-text{
+        position: static;
+        text-align: center;
+        margin-top: 40px;
+        transform: none;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .phone-box{
+        position: static;
+        width: 92%;
+        margin: 24px auto 0;
+        transform: none;
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .social-box{
+        bottom: 12px;
+        gap: 20px;
+    }
+
+    .social-box .i{
+        font-size: 32px;
+    }
+
+    .section{
+        width: 92%;
+        padding: 25px;
+        margin: 160px auto 30px auto;
+    }
+
+    .section + .section{
+        margin-top: 40px;
+    }
+}

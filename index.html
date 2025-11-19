@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>P Technology Webpage</title>
+
+  <!-- Link to CSS -->
+  <link rel="stylesheet" href="pk.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <h2 class="logo">Ps Technology</h2>
+
+    <ul class="menu">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#service">Service</a></li>
+      <li><a href="#design">Design</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="search-box">
+      <input type="text" placeholder="Type to search">
+      <button>Search</button>
+    </div>
+  </div>
+
+  <!-- MAIN TEXT -->
+  <div class="main-text" id="home">
+    <h2>Thank You For Visiting<br>P Technology</h2>
+    <p>Your support means a lot — Enjoy exploring our site!</p>
+    <a href="https://www.youtube.com/@tipswithearn01" class="join-btn" target="_blank">Join Us</a>
+  </div>
+
+  <!-- LOGIN BOX -->
+  <div class="phone-box">
+    <div class="screen">
+      <h3 id="auth-title">Create Account</h3>
+
+      <input id="auth-email" type="email" placeholder="Email">
+      <input id="auth-password" type="password" placeholder="Password (min 6 chars)">
+
+      <button id="auth-action" class="login-btn">Sign Up</button>
+
+      <p class="signup-text">
+        Already have an account?
+        <button id="auth-toggle" class="link-btn">Sign In</button>
+      </p>
+
+      <p id="auth-msg" class="auth-msg"></p>
+    </div>
+  </div>
+
+  <!-- SOCIAL ICONS -->
+  <div class="social-box">
+    <a href="https://www.instagram.com/pstechnology01/" class="i insta" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+    <a href="https://t.me/techwithtips0" class="i tele" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+    <a href="#" class="i tw" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+    <a href="https://www.youtube.com/@tipswithearn01" class="i yt" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+  </div>
+
+  <!-- CONTENT SECTIONS -->
+  <section id="home-section" class="section">
+    <h1>Welcome to P Technology</h1>
+    <p>We provide digital solutions, web services, technical guides, and modern designs.</p>
+  </section>
+
+  <section id="about" class="section">
+    <h1>About Us</h1>
+    <p>P Technology delivers tech content, website designs, and tutorials.</p>
+  </section>
+
+  <section id="service" class="section">
+    <h1>Our Services</h1>
+    <ul>
+      <li>✔ Website Development & Design</li>
+      <li>✔ Logo & Graphic Designing</li>
+      <li>✔ Digital Marketing Assistance</li>
+      <li>✔ Tech Tutorials & Guides</li>
+      <li>✔ Telegram & YouTube Support Services</li>
+    </ul>
+  </section>
+
+  <section id="design" class="section">
+    <h1>Designs We Create</h1>
+    <ul>
+      <li>Business Website Designs</li>
+      <li>Modern UI/UX Templates</li>
+      <li>App Interface Concepts</li>
+      <li>Social Media Posters</li>
+      <li>Thumbnail & Banner Designs</li>
+    </ul>
+  </section>
+
+  <section id="contact" class="section">
+    <h1>Contact Us</h1>
+    <p><strong>Email:</strong> pstechnology01@gmail.com</p>
+    <p><strong>Telegram:</strong> @techwithtips0</p>
+    <p><strong>Instagram:</strong> @pstechnology01</p>
+  </section>
+
+  <!-- FIREBASE AUTH SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+    // Your Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwC35sh20ttnUeNsMOi8ghzsab-Db_6c4",
+      authDomain: "pawan-9dd64.firebaseapp.com",
+      projectId: "pawan-9dd64",
+      storageBucket: "pawan-9dd64.appspot.com",
+      messagingSenderId: "261645960158",
+      appId: "1:261645960158:web:69b39c9ac9e132c1ef134f",
+      measurementId: "G-2SM29D8FGW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch (err) {}
+
+    const auth = getAuth(app);
+
+    const emailEl = document.getElementById("auth-email");
+    const passEl = document.getElementById("auth-password");
+    const actionBtn = document.getElementById("auth-action");
+    const toggleBtn = document.getElementById("auth-toggle");
+    const msgEl = document.getElementById("auth-msg");
+    const titleEl = document.getElementById("auth-title");
+
+    let isSignup = true;
+
+    function showMsg(msg, color="#ffb3a7") {
+      msgEl.style.color = color;
+      msgEl.textContent = msg;
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      isSignup = !isSignup;
+      if (isSignup) {
+        titleEl.textContent = "Create Account";
+        actionBtn.textContent = "Sign Up";
+        toggleBtn.textContent = "Sign In";
+      } else {
+        titleEl.textContent = "Sign In";
+        actionBtn.textContent = "Sign In";
+        toggleBtn.textContent = "Create Account";
+      }
+      showMsg("");
+    });
+
+    actionBtn.addEventListener("click", async () => {
+      const email = emailEl.value.trim();
+      const pass = passEl.value.trim();
+
+      if (!email || !pass) return showMsg("Please enter email and password.");
+
+      try {
+        if (isSignup) {
+          await createUserWithEmailAndPassword(auth, email, pass);
+          showMsg("Account created!", "green");
+        } else {
+          await signInWithEmailAndPassword(auth, email, pass);
+
+          // ✅ REDIRECT AFTER SUCCESS LOGIN
+          window.location.href = "welcome.html";
+        }
+      } catch (err) {
+        console.error(err);
+        showMsg(err.message);
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) console.log("Logged in:", user.email);
+    });
+  </script>
+
+</body>
+</html>

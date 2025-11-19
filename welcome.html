@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+
+    <style>
+        body{
+            background: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial;
+            flex-direction: column;
+        }
+        h1{
+            font-size: 50px;
+            color: #ff7200;
+            text-shadow: 0 0 20px #ff7200;
+        }
+        p{
+            font-size: 22px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="welcomeText">Welcome!</h1>
+    <p>You have successfully logged in abhi website pending me hai so wait patiently.</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBwC35sh20ttnUeNsMOi8ghzsab-Db_6c4",
+            authDomain: "pawan-9dd64.firebaseapp.com",
+            projectId: "pawan-9dd64",
+            storageBucket: "pawan-9dd64.appspot.com",
+            messagingSenderId: "261645960158",
+            appId: "1:261645960158:web:69b39c9ac9e132c1ef134f",
+            measurementId: "G-2SM29D8FGW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const welcomeText = document.getElementById("welcomeText");
+
+        // User already login kiya ho to email display karega
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                welcomeText.textContent = "Welcome, " + user.email + "!";
+            } else {
+                // If no login → redirect back
+                window.location.href = "index.html";
+            }
+        });
+    </script>
+
+</body>
+</html>
