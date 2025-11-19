@@ -13,24 +13,40 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            padding: 20px;
+            text-align: center;
             font-family: Arial;
             flex-direction: column;
         }
+
         h1{
-            font-size: 50px;
+            font-size: 42px;
             color: #ff7200;
             text-shadow: 0 0 20px #ff7200;
+            margin-bottom: 15px;
         }
+
         p{
-            font-size: 22px;
-            margin-top: 10px;
+            font-size: 18px;
+            line-height: 26px;
+            max-width: 90%;
+        }
+
+        /* Mobile screen friendly */
+        @media (max-width: 600px) {
+            h1{
+                font-size: 32px;
+            }
+            p{
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
 
     <h1 id="welcomeText">Welcome!</h1>
-    <p>You have successfully logged in abhi website pending me hai so wait patiently.</p>
+    <p>You have successfully logged in. Abhi website pending me hai, so please wait patiently.</p>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
@@ -51,12 +67,11 @@
 
         const welcomeText = document.getElementById("welcomeText");
 
-        // User already login kiya ho to email display karega
+        // User logged in → show email
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 welcomeText.textContent = "Welcome, " + user.email + "!";
             } else {
-                // If no login → redirect back
                 window.location.href = "index.html";
             }
         });
