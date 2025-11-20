@@ -21,7 +21,6 @@
     padding:0;
     font-family:'Poppins',sans-serif;
     -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
   }
 
   body{
@@ -35,14 +34,12 @@
     color:#fff;
   }
 
-  /* subtle overlay so content is readable */
   body::before{
     content:"";
     position:absolute;
     inset:0;
     background:var(--overlay);
     z-index:0;
-    pointer-events:none;
   }
 
   .page{
@@ -51,12 +48,13 @@
     min-height:100vh;
   }
 
-  /* ========== TOP-LEFT LOGO ========== */
+
+  /* LOGO TOP LEFT */
   .logoContainer{
     position:absolute;
     top:22px;
     left:22px;
-    z-index:60;
+    z-index:30;
     display:flex;
     align-items:center;
     gap:14px;
@@ -112,26 +110,23 @@
     background:#000;
   }
 
-  /* FIXED brandName stable + neon glow only */
   .brandName{
     font-size:22px;
     font-weight:700;
     letter-spacing:0.3px;
-    opacity:1;
-    transform: translateY(0);
-    animation: textPulse 3s infinite ease-in-out;
+    opacity:1; /* FIXED – always visible */
+    animation: textPulse 3s infinite;
     text-shadow: 0 0 12px rgba(255,114,0,0.9);
   }
 
-  /* ========== HERO + CLEAN NEON RECTANGLE ========== */
+
+  /* HERO SECTION */
   .hero{
     min-height:100vh;
     display:flex;
-    align-items:flex-start;      /* <-- changed: put card near top */
+    align-items:center;
     justify-content:center;
-    padding:120px 20px 60px 20px; /* bigger top padding so card appears below logo */
-    z-index:1;
-    position:relative;
+    padding:40px 20px;
   }
 
   .centerCardWrap{
@@ -145,29 +140,25 @@
     width:100%;
     border-radius:14px;
     padding:28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12));
-    backdrop-filter: blur(8px) saturate(120%);
-    box-shadow: 0 18px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
-    overflow:visible;
-    z-index:10;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+    backdrop-filter: blur(6px) saturate(120%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     display:grid;
     grid-template-columns: 1fr auto;
     gap:18px;
     align-items:center;
-    border:1px solid rgba(255,255,255,0.03);
   }
 
-  /* CLEAN stable neon border/glow (NO tilted line) */
   .centerCard::before{
     content: "";
     position: absolute;
-    inset: -10px;
+    inset: -8px;
     border-radius: 18px;
-    background: rgba(255,114,0,0.12); /* subtle static glow */
-    filter: blur(22px);
+    background: rgba(255,114,0,0.14);
+    filter: blur(24px);
     z-index:-1;
-    pointer-events:none;
   }
+
 
   .cardHead{
     display:flex;
@@ -181,32 +172,24 @@
     border-radius:8px;
     overflow:hidden;
     flex-shrink:0;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
   }
-  .thumbSmall img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .thumbSmall img{ width:100%; height:100%; object-fit:cover; }
 
   .cardTitle{
     font-size: clamp(20px, 2.6vw, 30px);
     font-weight:700;
     margin:0 0 8px 0;
-    color:#fff;
-    text-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
+
   .cardDesc{
-    color: rgba(255,255,255,0.95);
+    color: rgba(255,255,255,0.92);
     font-size: clamp(13px, 1.5vw, 16px);
     line-height:1.5;
     margin:0;
   }
 
-  .cardFooter{
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-
   .btn{
-    display:inline-block;
     padding:10px 18px;
     border-radius:10px;
     color:#fff;
@@ -219,90 +202,86 @@
   .smallThumbs{
     display:flex;
     gap:12px;
-    align-items:center;
   }
-  .smallThumb{ width:92px; height:64px; border-radius:8px; overflow:hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.45); }
-  .smallThumb img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-  /* ========== Animations ========== */
+  .smallThumb{ 
+    width:92px; 
+    height:64px; 
+    border-radius:8px; 
+    overflow:hidden; 
+  }
+
+  .smallThumb img{ width:100%; height:100%; object-fit:cover; }
+
+
+  /* ANIMATIONS */
   @keyframes rotateRing{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
   @keyframes logoIntro{ 0%{opacity:0; transform:translateY(-20px) scale(.8);} 100%{opacity:1; transform:none;} }
   @keyframes logoFadeIn{ 0%{opacity:0; transform:scale(.4);} 100%{opacity:1; transform:scale(1);} }
-  @keyframes textPulse{
-    0%{ text-shadow:0 0 8px rgba(255,114,0,0.6); }
-    50%{ text-shadow:0 0 20px rgba(255,114,0,1); }
-    100%{ text-shadow:0 0 8px rgba(255,114,0,0.6); }
-  }
-
-  /* ========== Responsive tweaks ========== */
-  @media (max-width:920px){
-    .centerCard{ padding:18px; border-radius:12px; grid-template-columns:1fr; }
-    .smallThumbs{ display:none; }
-    .centerCard::before{ inset:-6px; filter:blur(18px); }
-    .hero{ padding-top:100px; } /* reduce top padding on smaller screens */
-  }
-
-  @media (max-width:560px){
-    .logoBox{ width:72px; height:72px; }
-    .logoInside{ width:72px; height:72px; }
-    .brandName{ font-size:18px; }
-    .centerCard{ padding:14px; }
-    .cardTitle{ font-size:18px; }
-    .hero{ padding-top:80px; }
-  }
+  @keyframes textPulse{ 0%{ text-shadow:0 0 10px #ff7200 } 50%{ text-shadow:0 0 24px #ff7200 } 100%{ text-shadow:0 0 10px #ff7200 } }
 
 </style>
 </head>
+
 <body>
-  <div class="page">
 
-    <!-- top-left clickable logo -->
-    <div class="logoContainer">
-      <a class="logoLink" href="https://www.youtube.com/@Pstechnology1" target="_blank" aria-label="Open YouTube">
-        <div class="logoBox">
-          <div class="ringGlow"></div>
-          <div class="ring"></div>
-          <img class="logoInside" src="logo.png" alt="Logo">
-        </div>
-      </a>
-      <div class="brandName">P Technology</div>
-    </div>
+<div class="page">
 
-    <!-- hero with clean neon rectangle (now placed near top so visible) -->
-    <main class="hero" role="main" aria-live="polite">
-      <div class="centerCardWrap">
-        <section class="centerCard" role="region" aria-label="Featured courses">
-
-          <div>
-            <div class="cardHead">
-              <div class="thumbSmall"><img src="2.jpg" alt=""></div>
-
-              <div>
-                <h2 class="cardTitle">Featured Video & Live Batches</h2>
-                <p class="cardDesc">Explore our top-rated training on data engineering, Informatic and more. Join live batches or self-paced courses — special discounts available today.</p>
-              </div>
-            </div>
-
-            <div class="cardFooter" style="margin-top:18px;">
-              <div style="display:flex; gap:12px; align-items:center;">
-                <a class="btn" href="https://www.youtube.com/@Pstechnology1" target="_blank">Watch Now</a>
-                <a class="btn" href="#" style="background:transparent; border:1px solid rgba(255,255,255,0.08); box-shadow:none;">Explore</a>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex; align-items:center;">
-            <div class="smallThumbs" aria-hidden="true">
-              <div class="smallThumb"><img src="2.jpg" alt=""></div>
-              <div class="smallThumb"><img src="2.jpg" alt=""></div>
-            </div>
-          </div>
-
-        </section>
+  <!-- LOGO -->
+  <div class="logoContainer">
+    <a class="logoLink" href="https://www.youtube.com/@Pstechnology1" target="_blank">
+      <div class="logoBox">
+        <div class="ringGlow"></div>
+        <div class="ring"></div>
+        <img class="logoInside" src="logo.png" alt="Logo">
       </div>
-    </main>
+    </a>
 
+    <div class="brandName">P Technology</div>
   </div>
+
+
+  <!-- HERO CARD -->
+  <main class="hero">
+    <div class="centerCardWrap">
+
+      <section class="centerCard">
+
+        <div>
+          <div class="cardHead">
+            <div class="thumbSmall"><img src="2.jpg"></div>
+
+            <div>
+              <h2 class="cardTitle">Featured Video & Live Batches</h2>
+              <p class="cardDesc">Explore our training, live sessions & more. Special offers available today.</p>
+            </div>
+          </div>
+
+          <div class="cardFooter" style="margin-top:18px;">
+            <a class="btn" href="https://www.youtube.com/@Pstechnology1" target="_blank">Watch Now</a>
+
+            <!-- ⭐ INSTAGRAM LINK ADDED HERE ⭐ -->
+            <a class="btn"
+               href="https://www.instagram.com/pstechnology01/"
+               target="_blank"
+               style="background:transparent; border:1px solid rgba(255,255,255,0.2); box-shadow:none;">
+               Explore
+            </a>
+          </div>
+        </div>
+
+
+        <div class="smallThumbs">
+          <div class="smallThumb"><img src="2.jpg"></div>
+          <div class="smallThumb"><img src="2.jpg"></div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
 </body>
 </html>
-
