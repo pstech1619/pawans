@@ -56,7 +56,7 @@
     position:absolute;
     top:22px;
     left:22px;
-    z-index:30;
+    z-index:60;
     display:flex;
     align-items:center;
     gap:14px;
@@ -112,15 +112,13 @@
     background:#000;
   }
 
-  /* ====== FIXED: brandName stable + neon glow only ====== */
+  /* FIXED brandName stable + neon glow only */
   .brandName{
     font-size:22px;
     font-weight:700;
     letter-spacing:0.3px;
-    /* make it visible and stable — no dropSettle animation */
     opacity:1;
     transform: translateY(0);
-    /* keep a subtle neon pulse glow only (doesn't move the text) */
     animation: textPulse 3s infinite ease-in-out;
     text-shadow: 0 0 12px rgba(255,114,0,0.9);
   }
@@ -129,9 +127,9 @@
   .hero{
     min-height:100vh;
     display:flex;
-    align-items:center;
+    align-items:flex-start;      /* <-- changed: put card near top */
     justify-content:center;
-    padding:40px 20px;
+    padding:120px 20px 60px 20px; /* bigger top padding so card appears below logo */
     z-index:1;
     position:relative;
   }
@@ -147,25 +145,26 @@
     width:100%;
     border-radius:14px;
     padding:28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-    backdrop-filter: blur(6px) saturate(120%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12));
+    backdrop-filter: blur(8px) saturate(120%);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
     overflow:visible;
     z-index:10;
     display:grid;
     grid-template-columns: 1fr auto;
     gap:18px;
     align-items:center;
+    border:1px solid rgba(255,255,255,0.03);
   }
 
   /* CLEAN stable neon border/glow (NO tilted line) */
   .centerCard::before{
     content: "";
     position: absolute;
-    inset: -8px;
+    inset: -10px;
     border-radius: 18px;
-    background: rgba(255,114,0,0.14); /* subtle static glow */
-    filter: blur(24px);
+    background: rgba(255,114,0,0.12); /* subtle static glow */
+    filter: blur(22px);
     z-index:-1;
     pointer-events:none;
   }
@@ -194,7 +193,7 @@
     text-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
   .cardDesc{
-    color: rgba(255,255,255,0.92);
+    color: rgba(255,255,255,0.95);
     font-size: clamp(13px, 1.5vw, 16px);
     line-height:1.5;
     margin:0;
@@ -229,11 +228,10 @@
   @keyframes rotateRing{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
   @keyframes logoIntro{ 0%{opacity:0; transform:translateY(-20px) scale(.8);} 100%{opacity:1; transform:none;} }
   @keyframes logoFadeIn{ 0%{opacity:0; transform:scale(.4);} 100%{opacity:1; transform:scale(1);} }
-  /* removed dropSettle usage for brandName — kept textPulse only */
-  @keyframes textPulse{ 
-    0%{ text-shadow:0 0 8px rgba(255,114,0,0.6); } 
-    50%{ text-shadow:0 0 20px rgba(255,114,0,1); } 
-    100%{ text-shadow:0 0 8px rgba(255,114,0,0.6); } 
+  @keyframes textPulse{
+    0%{ text-shadow:0 0 8px rgba(255,114,0,0.6); }
+    50%{ text-shadow:0 0 20px rgba(255,114,0,1); }
+    100%{ text-shadow:0 0 8px rgba(255,114,0,0.6); }
   }
 
   /* ========== Responsive tweaks ========== */
@@ -241,6 +239,7 @@
     .centerCard{ padding:18px; border-radius:12px; grid-template-columns:1fr; }
     .smallThumbs{ display:none; }
     .centerCard::before{ inset:-6px; filter:blur(18px); }
+    .hero{ padding-top:100px; } /* reduce top padding on smaller screens */
   }
 
   @media (max-width:560px){
@@ -249,6 +248,7 @@
     .brandName{ font-size:18px; }
     .centerCard{ padding:14px; }
     .cardTitle{ font-size:18px; }
+    .hero{ padding-top:80px; }
   }
 
 </style>
@@ -268,7 +268,7 @@
       <div class="brandName">P Technology</div>
     </div>
 
-    <!-- hero with clean neon rectangle (no tilted line) -->
+    <!-- hero with clean neon rectangle (now placed near top so visible) -->
     <main class="hero" role="main" aria-live="polite">
       <div class="centerCardWrap">
         <section class="centerCard" role="region" aria-label="Featured courses">
@@ -295,7 +295,6 @@
             <div class="smallThumbs" aria-hidden="true">
               <div class="smallThumb"><img src="2.jpg" alt=""></div>
               <div class="smallThumb"><img src="2.jpg" alt=""></div>
-              
             </div>
           </div>
 
