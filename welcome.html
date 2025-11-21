@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Welcome</title>
 
-<!-- Google Font -->
+<!-- Fonts + Font Awesome -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<!-- Font Awesome (CDN - reliable) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -18,7 +17,7 @@
   --icon-size: 56px;
 }
 
-/* Base */
+/* Reset / base */
 *{ box-sizing:border-box; }
 html,body{ height:100%; margin:0; padding:0; font-family:'Poppins',sans-serif; -webkit-font-smoothing:antialiased; }
 body{
@@ -30,7 +29,6 @@ body{
   position:relative;
   min-height:100vh;
 }
-/* overlay */
 body::before{
   content:"";
   position:absolute;
@@ -41,85 +39,87 @@ body::before{
 }
 .page{ position:relative; z-index:1; min-height:100vh; }
 
-/* LOGO - made slightly larger & stable */
+/* ================= LOGO (SMALLER RING, LOGO FILLS INSIDE) ================= */
 .logoContainer{
   position:absolute;
-  top:20px;
-  left:20px;
-  z-index:120;              /* ensure above everything */
+  top:18px;
+  left:18px;
+  z-index:140;            /* stay on top */
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:12px;
 }
 
+/* clickable wrapper */
 .logoLink{ display:flex; align-items:center; text-decoration:none; }
 
+/* box holds both ring and logo — keep this a bit larger so ring surrounds logo */
 .logoBox{
   position:relative;
-  width:110px;             /* increased */
-  height:110px;            /* increased */
+  width:120px;           /* container size */
+  height:120px;
   border-radius:50%;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   cursor:pointer;
 }
 
+/* glow behind whole element */
 .ringGlow{
   position:absolute;
-  width:150px;
+  width:150px;           /* slightly larger than ring */
   height:150px;
   border-radius:50%;
   background:radial-gradient(circle, rgba(255,114,0,0.55), rgba(255,114,0,0));
   filter:blur(18px);
-  z-index:-2;
+  z-index:-3;
 }
 
+/* THE RING: reduced size so logo visually fills the center */
 .ring{
   position:absolute;
-  width:130px;
-  height:130px;
+  width:124px;           /* smaller ring diameter */
+  height:124px;
   border-radius:50%;
   border:5px solid transparent;
   border-top-color:#ff7200;
   border-right-color:#ff4800;
   border-bottom-color:#ff7200;
   border-left-color:#ff4800;
-  filter: drop-shadow(0 0 22px rgba(255,114,0,0.95));
-  animation: rotateRing 4s linear infinite;
-  z-index:-1;
+  filter: drop-shadow(0 0 20px rgba(255,114,0,0.95));
+  animation: rotateRing 6s linear infinite;
+  z-index:-2;
 }
 
-/* Logo image size & final state forced to 1:1 */
+/* LOGO IMAGE — fill the interior of the ring */
 .logoInside{
-  width:88px;              /* good visible size */
-  height:88px;
+  width:104px;           /* slightly smaller than ring to fit inside */
+  height:104px;
   border-radius:50%;
   object-fit:cover;
-  opacity:1;               /* keep visible immediately */
-  transform:none;          /* no scale shrink */
-  transition: transform .35s ease, box-shadow .35s ease;
-  box-shadow: 0 6px 30px rgba(0,0,0,0.45);
+  display:block;
+  /* make it crisp and centered */
+  box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+  transition: transform .28s ease, box-shadow .28s ease;
+  z-index:2;
 }
 
-/* on hover show a little scale (like before) */
+/* on hover scale the logo slightly (nice effect) */
 .logoBox:hover .logoInside{
   transform: scale(1.06);
-  box-shadow: 0 18px 50px rgba(255,114,0,0.15);
+  box-shadow: 0 18px 48px rgba(255,114,0,0.14);
 }
 
-/* brand name */
+/* Brand text next to logo */
 .brandName{
   font-size:22px;
   font-weight:700;
-  letter-spacing:0.3px;
   color:#fff;
-  margin-left:6px;
-  text-shadow:0 0 12px rgba(255,114,0,0.9);
-  align-self:center;
+  text-shadow: 0 0 12px rgba(255,114,0,0.9);
 }
 
-/* HERO & CARD */
+/* ================= HERO + CARD ================= */
 .hero{
   min-height:100vh;
   display:flex;
@@ -151,68 +151,44 @@ body::before{
   box-shadow: 0 25px 60px rgba(255,114,0,0.25), 0 10px 25px rgba(0,0,0,0.45);
   background: rgba(255,255,255,0.07);
 }
-
-/* centerCard glow background */
 .centerCard::before{
   content:"";
   position:absolute;
   inset:-10px;
-  border-radius:20px;
+  border-radius:18px;
   background: rgba(255,114,0,0.12);
   filter:blur(22px);
   z-index:-1;
 }
 
-/* left flexible content */
-.left{
-  flex:1 1 auto;
-  min-width:0;
-}
+.left{ flex:1 1 auto; min-width:0; }
 .cardHead{ display:flex; gap:16px; align-items:flex-start; }
-.thumbSmall{ width:84px; height:64px; border-radius:8px; overflow:hidden; flex-shrink:0; }
+.thumbSmall{ width:84px; height:64px; border-radius:8px; overflow:hidden; flex-shrink:0; box-shadow:0 8px 30px rgba(0,0,0,0.45); }
 .thumbSmall img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-.cardTitle{
-  font-size: clamp(20px, 2.7vw, 32px);
-  font-weight:700;
-  margin:0 0 8px 0;
-  line-height:1.05;
-}
+.cardTitle{ font-size: clamp(20px, 2.7vw, 32px); font-weight:700; margin:0 0 8px 0; line-height:1.05; }
 .cardDesc{ margin:0; color: rgba(255,255,255,0.92); font-size:16px; }
 
-/* buttons */
 .cardFooter{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
-.btn{
-  padding:10px 18px;
-  border-radius:10px;
-  color:#fff;
-  font-weight:600;
-  text-decoration:none;
-  background: linear-gradient(90deg,var(--glow),var(--glow-dark));
-  box-shadow: 0 10px 30px rgba(255,114,0,0.16);
-}
+.btn{ padding:10px 18px; border-radius:10px; color:#fff; font-weight:600; text-decoration:none; background: linear-gradient(90deg,var(--glow),var(--glow-dark)); box-shadow: 0 10px 30px rgba(255,114,0,0.16); }
 
 /* right thumbnails */
 .smallThumbs{ display:flex; gap:12px; flex-shrink:0; }
 .smallThumb{ width:92px; height:64px; border-radius:8px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.45); }
 .smallThumb img{ width:100%; height:100%; object-fit:cover; }
 
-/* SOCIAL ICONS BOTTOM (fixed & visible) */
+/* ================= SOCIAL ICONS BOTTOM ================= */
 #social-bottom{
   position:fixed;
   left:0;
   right:0;
-  bottom:22px;
+  bottom:20px;
   display:flex;
   justify-content:center;
-  z-index:140;              /* above everything */
-  pointer-events:none;      /* allow only children to be clickable by default */
+  z-index:200;
+  pointer-events:none; /* allow only kids */
 }
-.social-box{
-  display:flex;
-  gap:20px;
-  pointer-events:auto;      /* allow clicks on icons */
-}
+.social-box{ display:flex; gap:20px; pointer-events:auto; }
 
 .i{
   width:var(--icon-size);
@@ -221,23 +197,21 @@ body::before{
   align-items:center;
   justify-content:center;
   border-radius:14px;
-  color:#fff;
   font-size:22px;
+  color:#fff;
   text-decoration:none;
   position:relative;
   background: rgba(255,255,255,0.04);
   transition: transform .26s ease, box-shadow .26s ease;
   cursor:pointer;
 }
-
-/* neon border / glow */
 .i::before{
   content:"";
   position:absolute;
   inset:-6px;
   border-radius:18px;
   background:linear-gradient(90deg,#ff7200,#ffd37d,#ff7200);
-  filter:blur(10px);
+  filter:blur(12px);
   opacity:0.7;
   z-index:-2;
   animation: spinBorder 6s linear infinite;
@@ -251,53 +225,51 @@ body::before{
   z-index:-1;
   filter:blur(2px);
 }
-
-/* individual color tweaks */
 .insta::before{ background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af); }
 .tele::before{ background:linear-gradient(45deg,#00a2ff,#0088cc); }
 .tw::before{ background:linear-gradient(45deg,#00acee,#0077b5); }
 .yt::before{ background:linear-gradient(45deg,#ff0000,#ff4b4b); }
-
 .i:hover{ transform:translateY(-8px) scale(1.08); box-shadow:0 20px 60px rgba(255,114,0,0.2); }
 
-/* Animations */
+/* ================= KEYFRAMES ================= */
 @keyframes rotateRing{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
-@keyframes logoFadeIn{ 0%{opacity:0; transform:scale(.4);} 100%{opacity:1; transform:scale(1);} }
-@keyframes textPulse{ 0%{text-shadow:0 0 8px #ff7200;} 50%{text-shadow:0 0 20px #ff7200;} 100%{text-shadow:0 0 8px #ff7200;} }
 @keyframes spinBorder{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 
-/* Responsive */
-@media (max-width:920px){
+/* ================= RESPONSIVE (Mobile tweaks) ================= */
+@media (max-width:560px){
+  /* Make the logo area a bit bigger and let logo fill the ring */
+  .logoBox{ width:140px; height:140px; }
+  .ring{ width:140px; height:140px; border-width:6px; }
+  .ringGlow{ width:168px; height:168px; filter:blur(26px); }
+  .logoInside{ width:128px; height:128px; }
+
+  /* brand font a little larger and move text slightly */
+  .brandName{ font-size:24px; }
+
+  /* card stacking */
   .centerCard{ flex-direction:column; gap:14px; padding:20px; }
   .smallThumbs{ order:2; }
-  .logoContainer{ top:14px; left:14px; }
-}
-@media (max-width:560px){
-  :root{ --icon-size:48px; }
-  .logoBox{ width:86px; height:86px; }
-  .logoInside{ width:70px; height:70px; }
-  .brandName{ font-size:18px; }
-  .hero{ padding:100px 12px 60px; }
 }
 </style>
 </head>
+
 <body>
   <div class="page">
 
-    <!-- LOGO TOP LEFT -->
+    <!-- LOGO TOP-LEFT -->
     <div class="logoContainer">
       <a class="logoLink" href="https://www.youtube.com/@Pstechnology1" target="_blank" aria-label="Open YouTube">
         <div class="logoBox" title="P Technology">
           <div class="ringGlow"></div>
           <div class="ring"></div>
-          <!-- Use your real file name (logo.png / logo.jpg) -->
+          <!-- your logo (keeps exact filename) -->
           <img class="logoInside" src="logo.png" alt="P Technology logo">
         </div>
       </a>
       <div class="brandName">P Technology</div>
     </div>
 
-    <!-- HERO CARD -->
+    <!-- HERO -->
     <main class="hero">
       <div class="centerCardWrap">
         <section class="centerCard" aria-label="Featured courses">
@@ -313,7 +285,7 @@ body::before{
 
             <div class="cardFooter" style="margin-top:18px;">
               <a class="btn" href="https://www.youtube.com/@Pstechnology1" target="_blank">Watch Now</a>
-              <a class="btn" href="https://www.instagram.com/pstechnology01/" target="_blank" style="background:transparent;border:1px solid rgba(255,255,255,0.12);">Explore</a>
+              <a class="btn" href="https://www.instagram.com/pstechnology01/" target="_blank" style="background:transparent;border:1px solid rgba(255,255,255,0.12)">Explore</a>
             </div>
           </div>
 
@@ -326,13 +298,13 @@ body::before{
       </div>
     </main>
 
-    <!-- SOCIAL ICONS (fixed bottom center) -->
+    <!-- SOCIAL ICONS BOTTOM -->
     <div id="social-bottom">
       <div class="social-box" role="navigation" aria-label="Social links">
-        <a href="https://www.instagram.com/pstechnology01/" class="i insta" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://t.me/techwithtips0" class="i tele" target="_blank" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-        <a href="#" class="i tw" target="_blank" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="https://www.youtube.com/@tipswithearn01" class="i yt" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a class="i insta" href="https://www.instagram.com/pstechnology01/" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a class="i tele" href="https://t.me/techwithtips0" target="_blank" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        <a class="i tw" href="#" target="_blank" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        <a class="i yt" href="https://www.youtube.com/@tipswithearn01" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
       </div>
     </div>
 
