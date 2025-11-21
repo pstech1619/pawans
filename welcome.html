@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +16,12 @@
   --glow: #ff7200;
   --glow-dark: #b64300;
   --icon-size: 56px;
+  --card-max: 1100px;
 }
 
 /* Reset / base */
 *{ box-sizing:border-box; }
-html,body{ height:100%; margin:0; padding:0; font-family:'Poppins',sans-serif; -webkit-font-smoothing:antialiased; }
+html,body{ height:100%; margin:0; padding:0; font-family:'Poppins',sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 body{
   background-image: url("2.jpg");
   background-size:cover;
@@ -28,6 +30,7 @@ body{
   color:#fff;
   position:relative;
   min-height:100vh;
+  -webkit-font-smoothing:antialiased;
 }
 body::before{
   content:"";
@@ -37,49 +40,42 @@ body::before{
   z-index:0;
   pointer-events:none;
 }
-.page{ position:relative; z-index:1; min-height:100vh; }
+.page{ position:relative; z-index:1; min-height:100vh; padding-bottom:120px; }
 
-/* ================= LOGO (SMALLER RING, LOGO FILLS INSIDE) ================= */
+/* ================= LOGO ================= */
 .logoContainer{
   position:absolute;
   top:18px;
   left:18px;
-  z-index:140;            /* stay on top */
+  z-index:140;
   display:flex;
   align-items:center;
   gap:12px;
 }
 
-/* clickable wrapper */
 .logoLink{ display:flex; align-items:center; text-decoration:none; }
 
-/* box holds both ring and logo — keep this a bit larger so ring surrounds logo */
 .logoBox{
   position:relative;
-  width:120px;           /* container size */
+  width:120px;
   height:120px;
   border-radius:50%;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   cursor:pointer;
 }
-
-/* glow behind whole element */
 .ringGlow{
   position:absolute;
-  width:150px;           /* slightly larger than ring */
+  width:150px;
   height:150px;
   border-radius:50%;
   background:radial-gradient(circle, rgba(255,114,0,0.55), rgba(255,114,0,0));
   filter:blur(18px);
-  z-index:-3;
 }
-
-/* THE RING: reduced size so logo visually fills the center */
 .ring{
   position:absolute;
-  width:124px;           /* smaller ring diameter */
+  width:124px;
   height:124px;
   border-radius:50%;
   border:5px solid transparent;
@@ -89,29 +85,19 @@ body::before{
   border-left-color:#ff4800;
   filter: drop-shadow(0 0 20px rgba(255,114,0,0.95));
   animation: rotateRing 6s linear infinite;
-  z-index:-2;
 }
-
-/* LOGO IMAGE — fill the interior of the ring */
 .logoInside{
-  width:104px;           /* slightly smaller than ring to fit inside */
+  width:104px;
   height:104px;
   border-radius:50%;
   object-fit:cover;
   display:block;
-  /* make it crisp and centered */
   box-shadow: 0 6px 28px rgba(0,0,0,0.45);
   transition: transform .28s ease, box-shadow .28s ease;
   z-index:2;
 }
+.logoBox:hover .logoInside{ transform: scale(1.06); box-shadow: 0 18px 48px rgba(255,114,0,0.14); }
 
-/* on hover scale the logo slightly (nice effect) */
-.logoBox:hover .logoInside{
-  transform: scale(1.06);
-  box-shadow: 0 18px 48px rgba(255,114,0,0.14);
-}
-
-/* Brand text next to logo */
 .brandName{
   font-size:22px;
   font-weight:700;
@@ -121,15 +107,14 @@ body::before{
 
 /* ================= HERO + CARD ================= */
 .hero{
-  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:40px 20px;
+  padding:56px 20px;
   z-index:1;
 }
 
-.centerCardWrap{ width:min(1150px, 94%); }
+.centerCardWrap{ width:min(var(--card-max), 94%); margin: 24px auto; }
 
 .centerCard{
   position: relative;
@@ -172,10 +157,16 @@ body::before{
 .cardFooter{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
 .btn{ padding:10px 18px; border-radius:10px; color:#fff; font-weight:600; text-decoration:none; background: linear-gradient(90deg,var(--glow),var(--glow-dark)); box-shadow: 0 10px 30px rgba(255,114,0,0.16); }
 
-/* right thumbnails */
-.smallThumbs{ display:flex; gap:12px; flex-shrink:0; }
-.smallThumb{ width:92px; height:64px; border-radius:8px; overflow:hidden; box-shadow:0 8px 30px rgba(0,0,0,0.45); }
-.smallThumb img{ width:100%; height:100%; object-fit:cover; }
+/* right image (profile) */
+.smallThumbs{ display:flex; gap:12px; flex-shrink:0; align-items:center; justify-content:center; }
+.smallThumbs img{
+  width:150px;
+  max-width:40vw;
+  height:auto;
+  border-radius:14px;
+  box-shadow:0 0 25px rgba(255,114,0,0.6);
+  display:block;
+}
 
 /* ================= SOCIAL ICONS BOTTOM ================= */
 #social-bottom{
@@ -186,7 +177,7 @@ body::before{
   display:flex;
   justify-content:center;
   z-index:200;
-  pointer-events:none; /* allow only kids */
+  pointer-events:none;
 }
 .social-box{ display:flex; gap:20px; pointer-events:auto; }
 
@@ -236,19 +227,20 @@ body::before{
 @keyframes spinBorder{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 
 /* ================= RESPONSIVE (Mobile tweaks) ================= */
+@media (max-width:920px){
+  .smallThumbs img{ width:140px; }
+}
 @media (max-width:560px){
-  /* Make the logo area a bit bigger and let logo fill the ring */
   .logoBox{ width:140px; height:140px; }
   .ring{ width:140px; height:140px; border-width:6px; }
   .ringGlow{ width:168px; height:168px; filter:blur(26px); }
   .logoInside{ width:128px; height:128px; }
 
-  /* brand font a little larger and move text slightly */
   .brandName{ font-size:24px; }
 
-  /* card stacking */
   .centerCard{ flex-direction:column; gap:14px; padding:20px; }
-  .smallThumbs{ order:2; }
+  .smallThumbs{ order:2; width:100%; display:flex; justify-content:center; }
+  .smallThumbs img{ width:54vw; max-width:260px; }
 }
 </style>
 </head>
@@ -262,14 +254,14 @@ body::before{
         <div class="logoBox" title="P Technology">
           <div class="ringGlow"></div>
           <div class="ring"></div>
-          <!-- your logo (keeps exact filename) -->
+          <!-- logo file (local path) -->
           <img class="logoInside" src="logo.png" alt="P Technology logo">
         </div>
       </a>
       <div class="brandName">P Technology</div>
     </div>
 
-    <!-- HERO -->
+    <!-- ========== FIRST CARD ========== -->
     <main class="hero">
       <div class="centerCardWrap">
         <section class="centerCard" aria-label="Featured courses">
@@ -290,8 +282,35 @@ body::before{
           </div>
 
           <div class="smallThumbs" aria-hidden="true">
-            <div class="smallThumb"><img src="2.jpg" alt=""></div>
-            <div class="smallThumb"><img src="2.jpg" alt=""></div>
+            <img src="3.png" alt="Profile Photo">
+          </div>
+
+        </section>
+      </div>
+    </main>
+
+    <!-- ========== SECOND CARD (same design) ========== -->
+    <main class="hero" style="margin-top:-80px;">
+      <div class="centerCardWrap">
+        <section class="centerCard" aria-label="More courses">
+
+          <div class="left">
+            <div class="cardHead">
+              <div class="thumbSmall"><img src="2.jpg" alt=""></div>
+              <div>
+                <h2 class="cardTitle">More Courses & Tutorials</h2>
+                <p class="cardDesc">Learn web dev, editing, freelancing, AI tools & more. New videos and live sessions posted regularly.</p>
+              </div>
+            </div>
+
+            <div class="cardFooter" style="margin-top:18px;">
+              <a class="btn" href="https://www.youtube.com/@Pstechnology1" target="_blank">Watch Now</a>
+              <a class="btn" href="https://www.instagram.com/pstechnology01/" target="_blank" style="background:transparent;border:1px solid rgba(255,255,255,0.12)">Explore</a>
+            </div>
+          </div>
+
+          <div class="smallThumbs" aria-hidden="true">
+            <img src="3.png" alt="Profile Photo">
           </div>
 
         </section>
