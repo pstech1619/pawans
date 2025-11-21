@@ -15,6 +15,7 @@
   --glow-dark: #b64300;
   --icon-size: 56px;
   --card-max: 1100px;
+  --accent: rgba(255,114,0,0.95);
 }
 
 /* Reset / base */
@@ -38,7 +39,7 @@ body::before{
   z-index:0;
   pointer-events:none;
 }
-.page{ position:relative; z-index:1; min-height:100vh; padding-bottom:120px; }
+.page{ position:relative; z-index:1; min-height:100vh; padding-bottom:160px; }
 
 /* ================= LOGO ================= */
 .logoContainer{
@@ -55,8 +56,9 @@ body::before{
 
 .logoBox{
   position:relative;
-  width:120px;
-  height:120px;
+  /* LOGO SIZE REDUCED */
+  width:80px;
+  height:80px;
   border-radius:50%;
   display:flex;
   justify-content:center;
@@ -65,42 +67,46 @@ body::before{
 }
 .ringGlow{
   position:absolute;
-  width:150px;
-  height:150px;
+  /* GLOW SIZE REDUCED */
+  width:100px;
+  height:100px;
   border-radius:50%;
   background:radial-gradient(circle, rgba(255,114,0,0.55), rgba(255,114,0,0));
-  filter:blur(18px);
+  filter:blur(14px);
 }
 .ring{
   position:absolute;
-  width:124px;
-  height:124px;
+  /* RING SIZE REDUCED */
+  width:84px;
+  height:84px;
   border-radius:50%;
-  border:5px solid transparent;
+  border:4px solid transparent; /* Border slightly smaller */
   border-top-color:#ff7200;
   border-right-color:#ff4800;
   border-bottom-color:#ff7200;
   border-left-color:#ff4800;
-  filter: drop-shadow(0 0 20px rgba(255,114,0,0.95));
+  filter: drop-shadow(0 0 16px rgba(255,114,0,0.95));
   animation: rotateRing 6s linear infinite;
 }
 .logoInside{
-  width:104px;
-  height:104px;
+  /* LOGO IMAGE SIZE REDUCED */
+  width:70px;
+  height:70px;
   border-radius:50%;
   object-fit:cover;
   display:block;
-  box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
   transition: transform .28s ease, box-shadow .28s ease;
   z-index:2;
 }
-.logoBox:hover .logoInside{ transform: scale(1.06); box-shadow: 0 18px 48px rgba(255,114,0,0.14); }
+.logoBox:hover .logoInside{ transform: scale(1.06); box-shadow: 0 14px 38px rgba(255,114,0,0.14); }
 
 .brandName{
-  font-size:22px;
+  /* FONT SIZE REDUCED */
+  font-size:18px;
   font-weight:700;
   color:#fff;
-  text-shadow: 0 0 12px rgba(255,114,0,0.9);
+  text-shadow: 0 0 10px rgba(255,114,0,0.9);
 }
 
 /* ================= HERO + CARD ================= */
@@ -108,7 +114,8 @@ body::before{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:56px 20px;
+  /* Reduced padding top so card sits higher */
+  padding:56px 20px 20px 20px; 
   z-index:1;
 }
 
@@ -165,6 +172,69 @@ body::before{
   box-shadow:0 0 25px rgba(255,114,0,0.6);
   display:block;
 }
+
+/* ================= ABOUT + COMMENTS ================= */
+#about{
+  width:min(var(--card-max), 94%);
+  margin: 36px auto;
+  padding: 28px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+  position: relative;
+}
+#about h3{ margin:0 0 8px 0; font-size:22px; color:#fff; }
+#about p{ margin:0 0 16px 0; color:rgba(255,255,255,0.9); line-height:1.6; }
+
+.comment-area{
+  margin-top:18px;
+  display:grid;
+  gap:12px;
+}
+.comment-area input[type="text"],
+.comment-area textarea{
+  width:100%;
+  padding:12px 14px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.35);
+  color:#fff;
+  resize:vertical;
+  outline:none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+.comment-area textarea{ min-height:100px; max-height:240px; }
+
+.comment-actions{ display:flex; gap:12px; align-items:center; }
+.btn-ghost{
+  padding:10px 16px;
+  border-radius:8px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.08);
+  color:#fff;
+  cursor:pointer;
+}
+.btn-submit{
+  padding:10px 16px;
+  border-radius:8px;
+  background: linear-gradient(90deg,var(--glow),var(--glow-dark));
+  color:#fff;
+  cursor:pointer;
+  border:none;
+}
+
+/* each comment */
+#commentsList{ margin-top:18px; display:flex; flex-direction:column; gap:12px; }
+.comment{
+  padding:12px 14px;
+  border-radius:8px;
+  background: rgba(0,0,0,0.28);
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+.comment .meta{ font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:6px; }
+.comment .text{ color:#fff; line-height:1.5; }
 
 /* ================= SOCIAL ICONS BOTTOM ================= */
 #social-bottom{
@@ -229,19 +299,24 @@ body::before{
   .smallThumbs img{ width:140px; }
 }
 @media (max-width:560px){
-  /* लोगो साइज़ को डिफ़ॉल्ट (120px) पर वापस सेट किया गया ताकि मोबाइल पर यह छोटा और सही दिखे */
-  .logoBox{ width:120px; height:120px; }
-  .ring{ width:124px; height:124px; border-width:5px; }
-  .ringGlow{ width:150px; height:150px; filter:blur(18px); }
-  .logoInside{ width:104px; height:104px; }
+  /* mobile logo size further reduced and positioned better */
+  .logoBox{ width:64px; height:64px; }
+  .ring{ width:68px; height:68px; border-width:3px; }
+  .ringGlow{ width:80px; height:80px; filter:blur(10px); }
+  .logoInside{ width:56px; height:56px; }
 
-  /* Brand Name को डिफ़ॉल्ट (22px) पर वापस सेट किया गया */
-  .brandName{ font-size:22px; }
+  .brandName{ font-size:16px; margin-top:2px; }
+  /* Logo container repositioned to be closer to the top edge */
+  .logoContainer{ top:12px; left:12px; gap:8px; }
 
-  /* Card and other elements remains same */
+  /* Card and other elements */
   .centerCard{ flex-direction:column; gap:14px; padding:20px; }
   .smallThumbs{ order:2; width:100%; display:flex; justify-content:center; }
   .smallThumbs img{ width:54vw; max-width:260px; }
+
+  /* about and comments responsive */
+  #about{ padding:18px; margin:20px auto; }
+  .comment-area textarea{ min-height:90px; }
 }
 </style>
 </head>
@@ -314,6 +389,26 @@ body::before{
       </div>
     </main>
 
+    <section id="about" aria-label="About and Comments">
+      <h3>About P Technology</h3>
+      <p>
+        P Technology provides practical tech training — from web development to data tools and AI workflows.
+        We publish tutorials, run live batches, and share real-world projects so learners can build portfolios and get jobs.
+      </p>
+
+      <div class="comment-area" aria-label="Comment form">
+        <input type="text" id="commentName" placeholder="Your name (optional)">
+        <textarea id="commentText" placeholder="Write your comment..."></textarea>
+
+        <div class="comment-actions">
+          <button class="btn-ghost" id="clearBtn" type="button">Clear</button>
+          <button class="btn-submit" id="submitBtn" type="button">Post Comment</button>
+        </div>
+
+        <div id="commentsList" aria-live="polite"></div>
+      </div>
+    </section>
+
     <div id="social-bottom">
       <div class="social-box" role="navigation" aria-label="Social links">
         <a class="i insta" href="https://www.instagram.com/pstechnology01/" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -324,5 +419,71 @@ body::before{
     </div>
 
   </div>
+
+<script>
+/* Simple comment handling: store in localStorage so comments persist on same device */
+const nameEl = document.getElementById('commentName');
+const textEl = document.getElementById('commentText');
+const submitBtn = document.getElementById('submitBtn');
+const commentsList = document.getElementById('commentsList');
+const clearBtn = document.getElementById('clearBtn');
+
+function loadComments(){
+  const raw = localStorage.getItem('pt_comments');
+  if(!raw) return;
+  try{
+    const arr = JSON.parse(raw);
+    commentsList.innerHTML = '';
+    arr.forEach(c => {
+      commentsList.appendChild(renderComment(c));
+    });
+  }catch(e){
+    console.error(e);
+  }
+}
+
+function saveComment(obj){
+  const raw = localStorage.getItem('pt_comments');
+  const arr = raw ? JSON.parse(raw) : [];
+  arr.unshift(obj); // newest first
+  localStorage.setItem('pt_comments', JSON.stringify(arr.slice(0,50))); // keep last 50
+}
+
+function renderComment(c){
+  const wrap = document.createElement('div');
+  wrap.className = 'comment';
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  const name = c.name ? c.name : 'Anonymous';
+  meta.textContent = name + ' • ' + new Date(c.time).toLocaleString();
+  const txt = document.createElement('div');
+  txt.className = 'text';
+  txt.textContent = c.text;
+  wrap.appendChild(meta);
+  wrap.appendChild(txt);
+  return wrap;
+}
+
+submitBtn.addEventListener('click', () => {
+  const text = textEl.value.trim();
+  if(!text){
+    alert('Please write a comment before posting.');
+    return;
+  }
+  const obj = { name: nameEl.value.trim(), text, time: Date.now() };
+  saveComment(obj);
+  commentsList.insertBefore(renderComment(obj), commentsList.firstChild);
+  nameEl.value = '';
+  textEl.value = '';
+  textEl.blur();
+});
+
+clearBtn.addEventListener('click', () => {
+  nameEl.value = '';
+  textEl.value = '';
+});
+
+loadComments();
+</script>
 </body>
 </html>
