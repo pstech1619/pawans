@@ -55,7 +55,6 @@ body::before{
 .logoLink{ display:flex; align-items:center; text-decoration:none; }
 
 .logoBox{
-  position:relative;
   /* LOGO SIZE REDUCED */
   width:80px;
   height:80px;
@@ -66,8 +65,6 @@ body::before{
   cursor:pointer;
 }
 .ringGlow{
-  position:absolute;
-  /* GLOW SIZE REDUCED */
   width:100px;
   height:100px;
   border-radius:50%;
@@ -75,12 +72,10 @@ body::before{
   filter:blur(14px);
 }
 .ring{
-  position:absolute;
-  /* RING SIZE REDUCED */
   width:84px;
   height:84px;
   border-radius:50%;
-  border:4px solid transparent; /* Border slightly smaller */
+  border:4px solid transparent;
   border-top-color:#ff7200;
   border-right-color:#ff4800;
   border-bottom-color:#ff7200;
@@ -89,7 +84,6 @@ body::before{
   animation: rotateRing 6s linear infinite;
 }
 .logoInside{
-  /* LOGO IMAGE SIZE REDUCED */
   width:70px;
   height:70px;
   border-radius:50%;
@@ -102,7 +96,6 @@ body::before{
 .logoBox:hover .logoInside{ transform: scale(1.06); box-shadow: 0 14px 38px rgba(255,114,0,0.14); }
 
 .brandName{
-  /* FONT SIZE REDUCED */
   font-size:18px;
   font-weight:700;
   color:#fff;
@@ -114,7 +107,6 @@ body::before{
   display:flex;
   align-items:center;
   justify-content:center;
-  /* Reduced padding top so card sits higher */
   padding:56px 20px 20px 20px; 
   z-index:1;
 }
@@ -406,6 +398,8 @@ body::before{
         </div>
 
         <div id="commentsList" aria-live="polite"></div>
+        <!-- small status area -->
+        <div id="commentStatus" style="margin-top:10px;color:rgba(255,255,255,0.75);font-size:13px;"></div>
       </div>
     </section>
 
@@ -420,42 +414,53 @@ body::before{
 
   </div>
 
+  <!-- Firebase (compat) CDN scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
-/* Simple comment handling: store in localStorage so comments persist on same device */
+/* ------------------------
+   Replace with your Firebase config (you shared earlier)
+   ------------------------ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBwC35sh20ttnUeNsMOi8ghzsab-Db_6c4",
+  authDomain: "pawan-9dd64.firebaseapp.com",
+  databaseURL: "https://pawan-9dd64-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pawan-9dd64",
+  storageBucket: "pawan-9dd64.firebasestorage.app",
+  messagingSenderId: "261645960158",
+  appId: "1:261645960158:web:69b39c9ac9e132c1ef134f",
+  measurementId: "G-2SM29D8FGW"
+};
+
+/* Initialize Firebase and Realtime Database (compat) */
+let firebaseAvailable = false;
+try {
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
+  firebaseAvailable = true;
+} catch (err) {
+  console.error('Firebase init error:', err);
+  firebaseAvailable = false;
+}
+
+/* DOM Elements */
 const nameEl = document.getElementById('commentName');
 const textEl = document.getElementById('commentText');
 const submitBtn = document.getElementById('submitBtn');
 const commentsList = document.getElementById('commentsList');
 const clearBtn = document.getElementById('clearBtn');
+const statusEl = document.getElementById('commentStatus');
 
-function loadComments(){
-  const raw = localStorage.getItem('pt_comments');
-  if(!raw) return;
-  try{
-    const arr = JSON.parse(raw);
-    commentsList.innerHTML = '';
-    arr.forEach(c => {
-      commentsList.appendChild(renderComment(c));
-    });
-  }catch(e){
-    console.error(e);
-  }
-}
-
-function saveComment(obj){
-  const raw = localStorage.getItem('pt_comments');
-  const arr = raw ? JSON.parse(raw) : [];
-  arr.unshift(obj); // newest first
-  localStorage.setItem('pt_comments', JSON.stringify(arr.slice(0,50))); // keep last 50
-}
-
+/* Helper to render comment element safely (use textContent to avoid XSS) */
 function renderComment(c){
   const wrap = document.createElement('div');
   wrap.className = 'comment';
   const meta = document.createElement('div');
   meta.className = 'meta';
   const name = c.name ? c.name : 'Anonymous';
-  meta.textContent = name + ' • ' + new Date(c.time).toLocaleString();
+  const dateStr = c.time ? new Date(c.time).toLocaleString() : '';
+  meta.textContent = name + (dateStr ? ' • ' + dateStr : '');
   const txt = document.createElement('div');
   txt.className = 'text';
   txt.textContent = c.text;
@@ -464,6 +469,60 @@ function renderComment(c){
   return wrap;
 }
 
+/* FALLBACK localStorage functions (in case firebase not available) */
+function ls_loadComments(){
+  const raw = localStorage.getItem('pt_comments');
+  if(!raw) return;
+  try{
+    const arr = JSON.parse(raw);
+    commentsList.innerHTML = '';
+    arr.forEach(c => {
+      commentsList.appendChild(renderComment(c));
+    });
+  }catch(e){ console.error(e); }
+}
+function ls_saveComment(obj){
+  const raw = localStorage.getItem('pt_comments');
+  const arr = raw ? JSON.parse(raw) : [];
+  arr.unshift(obj);
+  localStorage.setItem('pt_comments', JSON.stringify(arr.slice(0,50)));
+}
+
+/* FIREBASE: listen for comments & display (realtime) */
+if(firebaseAvailable){
+  try{
+    statusEl.textContent = 'Connecting to comments...';
+    const commentsRef = db.ref('comments');
+
+    // Listen for new comments (child_added). We'll insert newest at top.
+    commentsRef.orderByChild('time').on('child_added', snapshot => {
+      const val = snapshot.val();
+      if(!val) return;
+      // Insert at top so newest appear first
+      const node = renderComment(val);
+      commentsList.insertBefore(node, commentsList.firstChild);
+    }, err => {
+      console.error('DB child_added error:', err);
+      statusEl.textContent = 'Comments: connection error. Using local-only comments.';
+      // fallback load local
+      ls_loadComments();
+    });
+
+    // Optionally listen for child_removed / changed if you want later
+
+    statusEl.textContent = 'Comments are live (Realtime).';
+  } catch(e){
+    console.error('Firebase DB listen error', e);
+    firebaseAvailable = false;
+    statusEl.textContent = 'Comments: connection failed, local-only.';
+    ls_loadComments();
+  }
+} else {
+  statusEl.textContent = 'Firebase unavailable — displaying local saved comments only.';
+  ls_loadComments();
+}
+
+/* Submit behaviour: push to Firebase if available otherwise localStorage */
 submitBtn.addEventListener('click', () => {
   const text = textEl.value.trim();
   if(!text){
@@ -471,11 +530,41 @@ submitBtn.addEventListener('click', () => {
     return;
   }
   const obj = { name: nameEl.value.trim(), text, time: Date.now() };
-  saveComment(obj);
-  commentsList.insertBefore(renderComment(obj), commentsList.firstChild);
-  nameEl.value = '';
-  textEl.value = '';
-  textEl.blur();
+
+  if(firebaseAvailable){
+    // push to realtime DB
+    try {
+      const newRef = db.ref('comments').push();
+      newRef.set(obj, (err) => {
+        if(err){
+          console.error('Push error:', err);
+          alert('Comment failed to post to server — saved locally.');
+          ls_saveComment(obj);
+          commentsList.insertBefore(renderComment(obj), commentsList.firstChild);
+        } else {
+          // success — the on('child_added') listener will insert it into DOM
+        }
+      });
+      // clear inputs right away
+      nameEl.value = '';
+      textEl.value = '';
+      textEl.blur();
+    } catch(e){
+      console.error('Push exception:', e);
+      alert('Error posting comment — saved locally.');
+      ls_saveComment(obj);
+      commentsList.insertBefore(renderComment(obj), commentsList.firstChild);
+      nameEl.value = '';
+      textEl.value = '';
+    }
+  } else {
+    // fallback to localStorage
+    ls_saveComment(obj);
+    commentsList.insertBefore(renderComment(obj), commentsList.firstChild);
+    nameEl.value = '';
+    textEl.value = '';
+    textEl.blur();
+  }
 });
 
 clearBtn.addEventListener('click', () => {
@@ -483,7 +572,7 @@ clearBtn.addEventListener('click', () => {
   textEl.value = '';
 });
 
-loadComments();
+/* End of script */
 </script>
 </body>
-</html>
+          </html>
