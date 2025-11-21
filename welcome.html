@@ -56,7 +56,6 @@ body::before{
 
 .logoBox{
   position:relative;
-  /* LOGO SIZE REDUCED */
   width:80px;
   height:80px;
   border-radius:50%;
@@ -67,7 +66,6 @@ body::before{
 }
 .ringGlow{
   position:absolute;
-  /* GLOW SIZE REDUCED */
   width:100px;
   height:100px;
   border-radius:50%;
@@ -77,11 +75,10 @@ body::before{
 }
 .ring{
   position:absolute;
-  /* RING SIZE REDUCED */
   width:84px;
   height:84px;
   border-radius:50%;
-  border:4px solid transparent; /* Border slightly smaller */
+  border:4px solid transparent;
   border-top-color:#ff7200;
   border-right-color:#ff4800;
   border-bottom-color:#ff7200;
@@ -91,7 +88,6 @@ body::before{
   z-index:-1;
 }
 .logoInside{
-  /* LOGO IMAGE SIZE REDUCED */
   width:70px;
   height:70px;
   border-radius:50%;
@@ -104,14 +100,12 @@ body::before{
 .logoBox:hover .logoInside{ transform: scale(1.06); box-shadow: 0 14px 38px rgba(255,114,0,0.14); }
 
 .brandName{
-  /* FONT SIZE REDUCED */
   font-size:18px;
   font-weight:700;
   color:#fff;
   text-shadow: 0 0 10px rgba(255,114,0,0.9);
 }
 
-/* ensure the logo stays visible above overlay */
 .logoContainer{ z-index:9999; pointer-events:auto; }
 
  /* ================= HERO + CARD ================= */
@@ -119,7 +113,6 @@ body::before{
   display:flex;
   align-items:center;
   justify-content:center;
-  /* Reduced padding top so card sits higher */
   padding:56px 20px 20px 20px; 
   z-index:1;
 }
@@ -141,7 +134,6 @@ body::before{
   justify-content:space-between;
   transition: transform .35s ease, box-shadow .35s ease, background .35s ease;
 }
-/* normal hover and also 'touched' class for mobile */
 .centerCard:hover,
 .centerCard.touched {
   transform: translateY(-10px) scale(1.02);
@@ -169,7 +161,6 @@ body::before{
 .cardFooter{ margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; }
 .btn{ padding:10px 18px; border-radius:10px; color:#fff; font-weight:600; text-decoration:none; background: linear-gradient(90deg,var(--glow),var(--glow-dark)); box-shadow: 0 10px 30px rgba(255,114,0,0.16); }
 
-/* right image (profile) */
 .smallThumbs{ display:flex; gap:12px; flex-shrink:0; align-items:center; justify-content:center; }
 .smallThumbs img{
   width:150px;
@@ -231,7 +222,6 @@ body::before{
   border:none;
 }
 
-/* each comment */
 #commentsList{ margin-top:18px; display:flex; flex-direction:column; gap:12px; }
 .comment{
   padding:12px 14px;
@@ -299,55 +289,154 @@ body::before{
 @keyframes rotateRing{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 @keyframes spinBorder{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce){
   .ring { animation: none !important; }
   .centerCard, .centerCard.touched, .centerCard:hover { transition: none !important; transform: none !important; }
 }
 
-/* ================= RESPONSIVE (Mobile tweaks) ================= */
 @media (max-width:920px){
   .smallThumbs img{ width:140px; }
 }
 @media (max-width:560px){
-  /* mobile logo size further reduced and positioned better */
   .logoBox{ width:64px; height:64px; }
   .ring{ width:68px; height:68px; border-width:3px; }
   .ringGlow{ width:80px; height:80px; filter:blur(10px); }
   .logoInside{ width:56px; height:56px; }
 
   .brandName{ font-size:16px; margin-top:2px; }
-  /* Logo container repositioned to be closer to the top edge */
   .logoContainer{ top:12px; left:12px; gap:8px; }
 
-  /* Card and other elements */
   .centerCard{ flex-direction:column; gap:14px; padding:20px; }
   .smallThumbs{ order:2; width:100%; display:flex; justify-content:center; }
   .smallThumbs img{ width:54vw; max-width:260px; }
 
-  /* about and comments responsive */
   #about{ padding:18px; margin:20px auto; }
   .comment-area textarea{ min-height:90px; }
 }
 
 /* =================== CHATBOT STYLES (ADDED) =================== */
+/* ---------- neon ring + bigger ---------- */
 .chat-toggle-btn{
   position:fixed;
-  right:22px;
-  bottom:92px;
+  right:20px;
+  bottom:96px;
   z-index:99999;
-  width:64px;
-  height:64px;
+  width:76px;
+  height:76px;
   border-radius:50%;
-  background: linear-gradient(90deg,var(--glow),var(--glow-dark));
-  box-shadow:0 12px 30px rgba(0,0,0,0.4);
+  background: radial-gradient(circle at 35% 25%, #ffffff14, transparent 30%), linear-gradient(90deg,var(--glow),var(--glow-dark));
   display:flex;
   align-items:center;
   justify-content:center;
   color:#fff;
   cursor:pointer;
   border:none;
+  backdrop-filter: blur(4px);
+  box-shadow:
+    0 6px 18px rgba(255,114,0,0.14),
+    0 0 30px rgba(255,114,0,0.12);
+  transition: transform .18s ease, box-shadow .18s ease;
+  overflow: visible;
+  padding:0;
 }
+
+/* animated neon ring (behind button) */
+.chat-toggle-btn::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ff9a3c, #ff4b00, #ffd37d, #ff9a3c);
+  filter: blur(10px) saturate(140%);
+  opacity: 0.95;
+  z-index: -2;
+  animation: neonRotate 6.5s linear infinite;
+  pointer-events: none;
+}
+
+/* subtle inner halo for depth */
+.chat-toggle-btn::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 86px;
+  height: 86px;
+  border-radius:50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.06), rgba(255,255,255,0));
+  z-index: -1;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* inside content wrapper: changed to row so avatar + text sit side-by-side */
+.chat-toggle-inner{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:auto;
+  height:56px;
+  pointer-events:none; /* click should go to button */
+}
+
+/* avatar inside small circle */
+.chat-toggle-inner .mini-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  overflow:hidden;
+  flex:0 0 44px;
+  display:block;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  border:2px solid rgba(255,255,255,0.06);
+}
+.chat-toggle-inner .mini-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* side text */
+.chat-toggle-inner .side-text{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  pointer-events:none;
+}
+.chat-toggle-inner .side-text .bold{
+  font-size:11px;
+  font-weight:700;
+  line-height:1;
+  color:#fff;
+  text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+.chat-toggle-inner .side-text .sub{
+  font-size:10px;
+  font-weight:600;
+  line-height:1;
+  opacity:0.95;
+  color:#fff;
+  margin-top:2px;
+}
+
+/* hide on very small screens to avoid crowding */
+@media (max-width:420px){
+  .chat-toggle-inner .side-text{ display:none; }
+}
+
+/* hover / press */
+.chat-toggle-btn:hover{ transform: translateY(-6px) scale(1.04); box-shadow: 0 18px 48px rgba(255,114,0,0.28); }
+.chat-toggle-btn:active{ transform: translateY(-2px) scale(.99); }
+
+@keyframes neonRotate{
+  0%{ transform: translate(-50%,-50%) rotate(0deg); }
+  100%{ transform: translate(-50%,-50%) rotate(360deg); }
+}
+
 .chat-window{
   position:fixed;
   right:22px;
@@ -421,7 +510,6 @@ body::before{
   cursor:pointer;
 }
 
-/* small typing indicator */
 .typing{
   display:inline-block;
   font-size:0;
@@ -440,7 +528,6 @@ body::before{
 .typing span:nth-child(3){ animation-delay:.3s; }
 @keyframes blink{ 0%{opacity:.25} 50%{opacity:1} 100%{opacity:.25} }
 
-/* small close btn */
 .chat-close{
   margin-left:auto;
   background:transparent;
@@ -450,7 +537,6 @@ body::before{
   font-size:16px;
 }
 
-/* responsive */
 @media (max-width:520px){
   .chat-window{ right:12px; left:12px; width:auto; bottom:120px; height:60vh; }
   .chat-toggle-btn{ right:12px; bottom:70px; }
@@ -556,8 +642,18 @@ body::before{
     </div>
 
     <!-- ================= CHATBOT WIDGET (ADDED) ================= -->
-    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat">
-      <i class="fa-solid fa-comment"></i>
+    <!-- Changed only the chat-toggle button content: avatar + side text "i am ai assistant of ps Tech" -->
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat" title="Chat with P Technology">
+      <div class="chat-toggle-inner" aria-hidden="true">
+        <span class="mini-avatar" aria-hidden="true">
+          <img src="/4.JPG" alt="assistant avatar">
+        </span>
+        <span class="side-text" aria-hidden="true">
+          <span class="bold">i am ai assistant</span>
+          <span class="sub">of ps Tech</span>
+        </span>
+      </div>
+      <span class="sr-only" style="position:absolute;left:-9999px">Open chat</span>
     </button>
 
     <div class="chat-window hidden" id="chatWindow" role="dialog" aria-label="Chat with P Technology">
@@ -569,7 +665,6 @@ body::before{
         <button class="chat-close" id="chatClose" aria-label="Close chat"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="chat-messages" id="chatMessages" aria-live="polite" aria-atomic="false">
-        <!-- messages will appear here -->
         <div class="msg bot">Namaste! Main P Technology ka assistant hoon. Aap kya janna chahenge? (e.g., "courses", "live batches", "YouTube", "Instagram")</div>
       </div>
 
@@ -669,7 +764,6 @@ function startRealtimeListener(){
   ref.on('child_added', snapshot => {
     const val = snapshot.val();
     if(!val) return;
-    // avoid duplicate if same comment already present (very small chance)
     appendCommentToList(val);
   });
 }
@@ -683,12 +777,9 @@ submitBtn.addEventListener('click', () => {
   }
   const obj = { name: nameEl.value.trim(), text, time: Date.now() };
 
-  // try push to firebase if available, otherwise fallback to localStorage
   if(database){
     pushCommentToFirebase(obj)
       .then(()=> {
-        // Firebase listener will add to DOM automatically
-        // also keep local copy
         saveLocalComment(obj);
         nameEl.value = '';
         textEl.value = '';
@@ -718,7 +809,6 @@ clearBtn.addEventListener('click', () => {
 
 /* initial load: show firebase comments if possible else local */
 if(database){
-  // load existing from firebase once and then start listener
   database.ref('comments').limitToLast(50).once('value')
     .then(snapshot => {
       commentsList.innerHTML = '';
@@ -726,7 +816,6 @@ if(database){
         const v = child.val();
         commentsList.appendChild(renderCommentDOM(v));
       });
-      // realtime updates
       startRealtimeListener();
     })
     .catch(err => {
@@ -795,7 +884,6 @@ if(database){
   function botReply(userText){
     const t = (userText || '').toLowerCase();
 
-    // quick keyword replies
     if(/^(hi|hii|hello|namaste|hey)\b/.test(t)) {
       return "Hello! 👋 Main aapki kaise madad kar sakta hoon? Aap pooch sakte hain: 'courses', 'live batches', 'YouTube', 'Instagram'.";
     }
@@ -818,7 +906,6 @@ if(database){
       return "Aap specific sawal pooch sakte hain (e.g., 'How to join live batch?', 'Course fees?', 'Best course for beginners?'). Main answer dunga ya direct link bhej dunga.";
     }
 
-    // fallback small talk
     const fallback = [
       "Mujhe maaf kijiye, main is sawal ka seedha jawab nahi de paaya. Thoda aur specific bataiye?",
       "Woh bahut achha sawaal hai — thoda aur detail den to main madad kar sakta hoon.",
@@ -828,7 +915,6 @@ if(database){
   }
 
   function simulateReply(userText){
-    // small typing indicator
     const typingNode = document.createElement('div');
     typingNode.className = 'msg bot';
     typingNode.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
@@ -838,12 +924,11 @@ if(database){
     setTimeout(()=> {
       typingNode.remove();
       const reply = botReply(userText);
-      // if reply contains a link, convert to anchor
       const linkified = reply.replace(/(https?:\/\/[^\s]+)/g, function(url){
         return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">' + url + '</a>';
       });
       appendMessage(null, 'bot', linkified);
-    }, 700 + Math.min(2000, userText.length * 25)); // dynamic delay
+    }, 700 + Math.min(2000, userText.length * 25));
   }
 
   function sendUser(){
@@ -863,12 +948,10 @@ if(database){
     }
   });
 
-  // open chat if user focuses input (mobile friendly)
   chatInput.addEventListener('focus', () => {
     if(chatWindow.classList.contains('hidden')) openChat();
   });
 
-  // accessibility: close on ESC
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape') {
       closeChat();
