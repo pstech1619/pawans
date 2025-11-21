@@ -114,7 +114,7 @@ body::before{
 /* ensure the logo stays visible above overlay */
 .logoContainer{ z-index:9999; pointer-events:auto; }
 
-/* ================= HERO + CARD ================= */
+ /* ================= HERO + CARD ================= */
 .hero{
   display:flex;
   align-items:center;
@@ -280,7 +280,6 @@ body::before{
   filter:blur(12px);
   opacity:0.7;
   z-index:-2;
-  animation: spinBorder 6s linear infinite;
 }
 .i::after{
   content:"";
@@ -297,7 +296,6 @@ body::before{
 .yt::before{ background:linear-gradient(45deg,#ff0000,#ff4b4b); }
 .i:hover{ transform:translateY(-8px) scale(1.08); box-shadow:0 20px 60px rgba(255,114,0,0.2); }
 
-/* ================= KEYFRAMES ================= */
 @keyframes rotateRing{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 @keyframes spinBorder{ 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 
@@ -330,6 +328,132 @@ body::before{
   /* about and comments responsive */
   #about{ padding:18px; margin:20px auto; }
   .comment-area textarea{ min-height:90px; }
+}
+
+/* =================== CHATBOT STYLES (ADDED) =================== */
+.chat-toggle-btn{
+  position:fixed;
+  right:22px;
+  bottom:92px;
+  z-index:99999;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background: linear-gradient(90deg,var(--glow),var(--glow-dark));
+  box-shadow:0 12px 30px rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  cursor:pointer;
+  border:none;
+}
+.chat-window{
+  position:fixed;
+  right:22px;
+  bottom:170px;
+  z-index:99998;
+  width:360px;
+  max-width:92vw;
+  height:480px;
+  max-height:84vh;
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background: linear-gradient(180deg, rgba(10,10,10,0.95), rgba(6,6,6,0.95));
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,255,255,0.04);
+  transform: translateY(12px);
+  transition: all .25s ease;
+}
+.chat-window.hidden{ opacity:0; visibility:hidden; transform: translateY(20px) scale(.98); pointer-events:none; }
+.chat-header{
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+}
+.chat-header .title{ font-weight:700; font-size:15px; color:#fff; }
+.chat-header .subtitle{ font-size:12px; color:rgba(255,255,255,0.7); }
+.chat-messages{
+  padding:12px;
+  flex:1 1 auto;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+}
+.msg{
+  max-width:82%;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:14px;
+  line-height:1.4;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+.msg.user{ align-self:flex-end; background: linear-gradient(90deg,#2b2b2b,#1f1f1f); color:#fff; border:1px solid rgba(255,255,255,0.03); }
+.msg.bot{ align-self:flex-start; background: rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.03); }
+.chat-input{
+  padding:10px;
+  display:flex;
+  gap:8px;
+  border-top:1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.55));
+}
+.chat-input input{
+  flex:1 1 auto;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color:#fff;
+  outline:none;
+}
+.chat-input button{
+  padding:8px 12px;
+  border-radius:10px;
+  border:none;
+  background: linear-gradient(90deg,var(--glow),var(--glow-dark));
+  color:#fff;
+  cursor:pointer;
+}
+
+/* small typing indicator */
+.typing{
+  display:inline-block;
+  font-size:0;
+}
+.typing span{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin:0 2px;
+  background:#fff;
+  border-radius:50%;
+  opacity:0.25;
+  animation: blink 1s infinite;
+}
+.typing span:nth-child(2){ animation-delay:.15s; }
+.typing span:nth-child(3){ animation-delay:.3s; }
+@keyframes blink{ 0%{opacity:.25} 50%{opacity:1} 100%{opacity:.25} }
+
+/* small close btn */
+.chat-close{
+  margin-left:auto;
+  background:transparent;
+  border:none;
+  color:rgba(255,255,255,0.8);
+  cursor:pointer;
+  font-size:16px;
+}
+
+/* responsive */
+@media (max-width:520px){
+  .chat-window{ right:12px; left:12px; width:auto; bottom:120px; height:60vh; }
+  .chat-toggle-btn{ right:12px; bottom:70px; }
 }
 </style>
 </head>
@@ -428,6 +552,30 @@ body::before{
         <a class="i tele" href="https://t.me/techwithtips0" target="_blank" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
         <a class="i tw" href="#" target="_blank" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
         <a class="i yt" href="https://www.youtube.com/@tipswithearn01" target="_blank" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+      </div>
+    </div>
+
+    <!-- ================= CHATBOT WIDGET (ADDED) ================= -->
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat">
+      <i class="fa-solid fa-comment"></i>
+    </button>
+
+    <div class="chat-window hidden" id="chatWindow" role="dialog" aria-label="Chat with P Technology">
+      <div class="chat-header">
+        <div>
+          <div class="title">P Technology Chatbot</div>
+          <div class="subtitle">Ask about courses, schedules or links</div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="chat-messages" id="chatMessages" aria-live="polite" aria-atomic="false">
+        <!-- messages will appear here -->
+        <div class="msg bot">Namaste! Main P Technology ka assistant hoon. Aap kya janna chahenge? (e.g., "courses", "live batches", "YouTube", "Instagram")</div>
+      </div>
+
+      <div class="chat-input">
+        <input id="chatInput" type="text" placeholder="Type your message..." aria-label="Type message">
+        <button id="chatSend" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
     </div>
 
@@ -604,6 +752,129 @@ if(database){
       this.classList.remove('touched');
     }, {passive:true});
   });
+})();
+
+/* ================= CHATBOT LOGIC (LOCAL, RULE-BASED) ================= */
+(function(){
+  const chatToggle = document.getElementById('chatToggle');
+  const chatWindow = document.getElementById('chatWindow');
+  const chatClose = document.getElementById('chatClose');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+
+  function openChat(){
+    chatWindow.classList.remove('hidden');
+    chatToggle.style.transform = 'scale(.95)';
+    setTimeout(()=> chatToggle.style.transform = '', 200);
+    chatInput.focus();
+  }
+  function closeChat(){
+    chatWindow.classList.add('hidden');
+  }
+
+  chatToggle.addEventListener('click', () => {
+    if(chatWindow.classList.contains('hidden')) openChat();
+    else closeChat();
+  });
+  chatClose.addEventListener('click', closeChat);
+
+  function appendMessage(text, who = 'bot', extraHTML){
+    const d = document.createElement('div');
+    d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+    if(extraHTML){
+      d.innerHTML = extraHTML;
+    } else {
+      d.textContent = text;
+    }
+    chatMessages.appendChild(d);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return d;
+  }
+
+  function botReply(userText){
+    const t = (userText || '').toLowerCase();
+
+    // quick keyword replies
+    if(/^(hi|hii|hello|namaste|hey)\b/.test(t)) {
+      return "Hello! 👋 Main aapki kaise madad kar sakta hoon? Aap pooch sakte hain: 'courses', 'live batches', 'YouTube', 'Instagram'.";
+    }
+    if(t.includes('course') || t.includes('courses') || t.includes('web dev') || t.includes('tutorial')) {
+      return "Hum web development, editing, freelancing, AI tools aur data related courses dete hain. YouTube par free tutorials bhi mil jayenge — ya live batches join kar sakte hain.";
+    }
+    if(t.includes('live') || t.includes('batch')) {
+      return "Live batches ke schedule ke liye YouTube channel par check karein ya Instagram par DM karein. Kya main YouTube link bhejun? (type: 'youtube')"
+    }
+    if(t.includes('youtube')) {
+      return "YouTube channel: https://www.youtube.com/@Pstechnology1 — yahan par latest tutorials aur live sessions milenge.";
+    }
+    if(t.includes('instagram') || t.includes('insta')) {
+      return "Instagram: https://www.instagram.com/pstechnology01/ — wahan par updates aur short clips post karte hain.";
+    }
+    if(t.includes('portfolio') || t.includes('job') || t.includes('placement')) {
+      return "Courses me projects aur portfolio building cover hota hai — job support depend karta hai batch par. Hum real-world projects dete hain jise aap showcase kar sakte hain.";
+    }
+    if(t.includes('help') || t.includes('how')) {
+      return "Aap specific sawal pooch sakte hain (e.g., 'How to join live batch?', 'Course fees?', 'Best course for beginners?'). Main answer dunga ya direct link bhej dunga.";
+    }
+
+    // fallback small talk
+    const fallback = [
+      "Mujhe maaf kijiye, main is sawal ka seedha jawab nahi de paaya. Thoda aur specific bataiye?",
+      "Woh bahut achha sawaal hai — thoda aur detail den to main madad kar sakta hoon.",
+      "Aap 'YouTube' ya 'Instagram' likh kar direct links le sakte hain."
+    ];
+    return fallback[Math.floor(Math.random()*fallback.length)];
+  }
+
+  function simulateReply(userText){
+    // small typing indicator
+    const typingNode = document.createElement('div');
+    typingNode.className = 'msg bot';
+    typingNode.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    chatMessages.appendChild(typingNode);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    setTimeout(()=> {
+      typingNode.remove();
+      const reply = botReply(userText);
+      // if reply contains a link, convert to anchor
+      const linkified = reply.replace(/(https?:\/\/[^\s]+)/g, function(url){
+        return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">' + url + '</a>';
+      });
+      appendMessage(null, 'bot', linkified);
+    }, 700 + Math.min(2000, userText.length * 25)); // dynamic delay
+  }
+
+  function sendUser(){
+    const v = chatInput.value.trim();
+    if(!v) return;
+    appendMessage(v, 'user');
+    chatInput.value = '';
+    chatInput.focus();
+    simulateReply(v);
+  }
+
+  chatSend.addEventListener('click', sendUser);
+  chatInput.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      sendUser();
+    }
+  });
+
+  // open chat if user focuses input (mobile friendly)
+  chatInput.addEventListener('focus', () => {
+    if(chatWindow.classList.contains('hidden')) openChat();
+  });
+
+  // accessibility: close on ESC
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') {
+      closeChat();
+    }
+  });
+
 })();
 </script>
 </body>
