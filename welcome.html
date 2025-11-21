@@ -880,24 +880,38 @@ if(database){
   // add guard so we can ignore the synthetic native click after we programmatically handle touch
   window._pt_ignore_next_native_click = false;
 
+  // expose toggle function so draggable code can call it directly (avoids conflict with native click)
+  window.ptToggleChat = function(){
+    if(!chatWindow) return;
+    if(chatWindow.classList.contains('hidden')) {
+      chatWindow.classList.remove('hidden');
+      try{ chatInput.focus(); }catch(e){}
+    } else {
+      chatWindow.classList.add('hidden');
+    }
+  };
+
   function openChat(){
+    if(!chatWindow) return;
     chatWindow.classList.remove('hidden');
     chatToggle.style.transform = 'scale(.95)';
     setTimeout(()=> chatToggle.style.transform = '', 200);
-    chatInput.focus();
+    try{ chatInput.focus(); }catch(e){}
   }
   function closeChat(){
+    if(!chatWindow) return;
     chatWindow.classList.add('hidden');
   }
 
+  // click handler respects the ignore flag for native clicks (mobile)
   chatToggle.addEventListener('click', (ev) => {
-    // if flagged to ignore this native click (browser fires click after touchend) then ignore once
     if(window._pt_ignore_next_native_click){
+      // ignore exactly one native click that the browser fires after touchend
       window._pt_ignore_next_native_click = false;
       return;
     }
-    if(chatWindow.classList.contains('hidden')) openChat();
-    else closeChat();
+    // toggle using shared function
+    window.ptToggleChat();
   });
   chatClose.addEventListener('click', closeChat);
 
@@ -1093,12 +1107,14 @@ if(database){
 
     // If we didn't move much (tap), treat as click/tap — but avoid double native click
     if(!moved){
-      // set a flag so chatbot click handler ignores the next native click event (mobile generates it)
+      // set a flag so the next native click (browser's synthesized click after touchend) will be ignored
       window._pt_ignore_next_native_click = true;
-      // programmatically toggle the button's click handler (this triggers same listener)
-      dragBtn.click();
-      // clear flag shortly after (in case)
-      setTimeout(()=> { window._pt_ignore_next_native_click = false; }, 350);
+      // directly toggle chat using exposed function (do NOT call .click() to avoid flag collision)
+      try{
+        if(typeof window.ptToggleChat === 'function') window.ptToggleChat();
+      }catch(err){}
+      // clear flag shortly after (so future clicks work)
+      setTimeout(()=> { window._pt_ignore_next_native_click = false; }, 450);
       return;
     }
 
@@ -1216,4 +1232,3 @@ if(database){
 </script>
 </body>
 </html>
-
