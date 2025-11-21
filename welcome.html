@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,6 +338,9 @@ body::before{
   transition: transform .18s ease, box-shadow .18s ease;
   overflow: visible;
   padding:0;
+  /* allow dragging on touch devices */
+  touch-action:none;
+  user-select:none;
 }
 
 /* animated neon ring (behind button) */
@@ -425,8 +427,30 @@ body::before{
 }
 
 /* hide on very small screens to avoid crowding */
-@media (max-width:420px){
+@media (max-width:600px){
+  /* Hide side text early on small screens and ensure avatar visible */
   .chat-toggle-inner .side-text{ display:none; }
+  /* make the toggle compact and sit above the bottom social bar on phones */
+  .chat-toggle-btn{
+    right:12px !important;
+    bottom:24px !important;
+    width:64px !important;
+    height:64px !important;
+    padding:0;
+    z-index:100005 !important;
+  }
+  .chat-toggle-inner{
+    height:48px;
+    gap:6px;
+  }
+  .chat-toggle-inner .mini-avatar{
+    width:40px;
+    height:40px;
+    flex:0 0 40px;
+  }
+  .chat-toggle-inner .mini-avatar img{ width:100%; height:100%; display:block; }
+  /* ensure the chat window doesn't cover the toggle on very small screens */
+  .chat-window{ right:12px; bottom:90px; }
 }
 
 /* hover / press */
@@ -647,7 +671,7 @@ body::before{
     <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat" title="Chat with P Technology">
       <div class="chat-toggle-inner" aria-hidden="true">
         <span class="mini-avatar" aria-hidden="false">
-          <img src="4.jpg" alt="assistant avatar">
+          <img src="4.png" alt="assistant avatar">
         </span>
         <span class="side-text" aria-hidden="true">
           <span class="bold">i am ai assistant</span>
@@ -915,6 +939,7 @@ if(database){
     return fallback[Math.floor(Math.random()*fallback.length)];
   }
 
+
   function simulateReply(userText){
     const typingNode = document.createElement('div');
     typingNode.className = 'msg bot';
@@ -961,7 +986,201 @@ if(database){
 
 })();
 </script>
+<!-- ========== Draggable chat-toggle code (added) ========== -->
+<script>
+(function(){
+  const dragBtn = document.getElementById('chatToggle');
+  if(!dragBtn) return;
+
+  // restore saved position
+  const saved = localStorage.getItem('pt_chat_pos');
+  if(saved){
+    try{
+      const pos = JSON.parse(saved);
+      if(typeof pos.left === 'number' && typeof pos.top === 'number'){
+        dragBtn.style.left = pos.left + 'px';
+        dragBtn.style.top = pos.top + 'px';
+        dragBtn.style.right = 'auto';
+        dragBtn.style.bottom = 'auto';
+      }
+    }catch(e){/* ignore */}
+  }
+
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  let origLeft = 0, origTop = 0;
+
+  function getBtnSize(){
+    const r = dragBtn.getBoundingClientRect();
+    return {w: r.width, h: r.height};
+  }
+
+  function start(e){
+    e.preventDefault();
+    isDragging = true;
+    const touch = e.touches ? e.touches[0] : null;
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    const rect = dragBtn.getBoundingClientRect();
+    startX = clientX;
+    startY = clientY;
+    origLeft = rect.left;
+    origTop = rect.top;
+
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', move, {passive:false});
+    document.addEventListener('touchend', end);
+  }
+
+  function move(e){
+    if(!isDragging) return;
+    e.preventDefault();
+    const touch = e.touches ? e.touches[0] : null;
+    const clientX = touch ? touch.clientX : e.clientX;
+    const clientY = touch ? touch.clientY : e.clientY;
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    let newLeft = origLeft + dx;
+    let newTop = origTop + dy;
+
+    // constrain inside viewport
+    const btnSize = getBtnSize();
+    const minLeft = 8;
+    const minTop = 8;
+    const maxLeft = window.innerWidth - btnSize.w - 8;
+    const maxTop = window.innerHeight - btnSize.h - 8;
+    if(newLeft < minLeft) newLeft = minLeft;
+    if(newLeft > maxLeft) newLeft = maxLeft;
+    if(newTop < minTop) newTop = minTop;
+    if(newTop > maxTop) newTop = maxTop;
+
+    dragBtn.style.left = newLeft + 'px';
+    dragBtn.style.top = newTop + 'px';
+    dragBtn.style.right = 'auto';
+    dragBtn.style.bottom = 'auto';
+  }
+
+  function end(){
+    if(!isDragging) return;
+    isDragging = false;
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', end);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend', end);
+
+    // save final position
+    const rect = dragBtn.getBoundingClientRect();
+    const pos = { left: Math.round(rect.left), top: Math.round(rect.top) };
+    try{ localStorage.setItem('pt_chat_pos', JSON.stringify(pos)); }catch(e){}
+  }
+
+  dragBtn.addEventListener('mousedown', start);
+  dragBtn.addEventListener('touchstart', start, {passive:false});
+
+  // double-click to reset to default
+  dragBtn.addEventListener('dblclick', ()=>{
+    dragBtn.style.right = '20px';
+    dragBtn.style.bottom = '96px';
+    dragBtn.style.left = 'auto';
+    dragBtn.style.top = 'auto';
+    try{ localStorage.removeItem('pt_chat_pos'); }catch(e){}
+  });
+})();
+</script>
+
+<!-- Make chat toggle visible on phones: place above bottom social bar and keep draggable saved pos -->
+<script>
+(function(){
+  const btn = document.getElementById('chatToggle');
+  const social = document.getElementById('social-bottom');
+
+  if(!btn) return;
+
+  // helper: ensure style exists and set important visibility props
+  function ensureVisibleStyle() {
+    btn.style.zIndex = 100010;
+    btn.style.pointerEvents = 'auto';
+    btn.style.touchAction = 'none';
+  }
+
+  // compute and place button above social bar if it would overlap on small screens
+  function placeAboveSocialIfNeeded() {
+    ensureVisibleStyle();
+
+    // Only enforce on phone widths
+    const small = window.innerWidth <= 600;
+    if(!small || !social) return;
+
+    // ensure button has dimensions
+    const btnRect = btn.getBoundingClientRect();
+    const socRect = social.getBoundingClientRect();
+    const margin = 12;
+
+    // If saved position exists, check if saved position causes overlap; otherwise place at default.
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('pt_chat_pos') || 'null'); } catch(e){ saved = null; }
+
+    // If saved pos exists, test overlap. saved.left/top are page coordinates.
+    if(saved && typeof saved.left === 'number' && typeof saved.top === 'number') {
+      const savedTop = saved.top;
+      const savedBottom = saved.top + btnRect.height;
+      const socialTop = socRect.top;
+      if(savedBottom + margin > socialTop) {
+        // move it above social
+        const newTop = Math.max(margin, Math.round(socialTop - btnRect.height - margin));
+        btn.style.left = (saved.left) + 'px';
+        btn.style.top = newTop + 'px';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
+        // update saved pos
+        try{ localStorage.setItem('pt_chat_pos', JSON.stringify({ left: Math.round(parseFloat(btn.style.left)), top: Math.round(newTop) })); }catch(e){}
+      } else {
+        // saved is fine — apply it
+        btn.style.left = saved.left + 'px';
+        btn.style.top = saved.top + 'px';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
+      }
+      return;
+    }
+
+    // If no saved pos or non-overlapping, set default mobile slot: bottom-right but above social bar
+    const btnW = btnRect.width || 64;
+    const desiredLeft = Math.max(8, window.innerWidth - btnW - 12);
+    const newTop = Math.max(8, Math.round(socRect.top - btnRect.height - margin));
+    btn.style.left = desiredLeft + 'px';
+    btn.style.top = newTop + 'px';
+    btn.style.right = 'auto';
+    btn.style.bottom = 'auto';
+
+    // Save position
+    try{ localStorage.setItem('pt_chat_pos', JSON.stringify({ left: desiredLeft, top: newTop })); }catch(e){}
+  }
+
+  // Watch for layout changes (resize/orientation)
+  window.addEventListener('resize', () => {
+    // small throttling
+    clearTimeout(window._pt_chat_pos_timer);
+    window._pt_chat_pos_timer = setTimeout(placeAboveSocialIfNeeded, 90);
+  });
+  window.addEventListener('orientationchange', () => setTimeout(placeAboveSocialIfNeeded, 120));
+
+  // Run on load (defer a bit so layout settles)
+  window.addEventListener('load', () => setTimeout(placeAboveSocialIfNeeded, 100));
+
+  // Also call once immediately (for dev mode)
+  setTimeout(placeAboveSocialIfNeeded, 200);
+
+  // Keep double-click reset behavior (if you already have it)
+  btn.addEventListener('dblclick', () => {
+    btn.style.right = '20px';
+    btn.style.bottom = '96px';
+    btn.style.left = 'auto';
+    btn.style.top = 'auto';
+    try{ localStorage.removeItem('pt_chat_pos'); }catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
-
-
